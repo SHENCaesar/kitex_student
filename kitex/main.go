@@ -23,10 +23,10 @@ func main() {
 		server.WithServiceAddr(addr),
 		server.WithRegistry(r),
 		server.WithServerBasicInfo(
-          &rpcinfo.EndpointBasicInfo{
-             ServiceName: "kitex_student_yeah",
-          },
-		),
+          	&rpcinfo.EndpointBasicInfo{
+            	ServiceName: "kitex_student_yeah",
+            },
+		), 
 	)
 
 	err = svr.Run()
