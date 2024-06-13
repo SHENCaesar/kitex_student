@@ -60,6 +60,7 @@ func test_register(stu *demo.Student) (rResp *demo.RegisterResp, err error) {
     resp, err = httpCli.Do(req)
     defer resp.Body.Close()
     if err != nil {
+      fmt.Printf("HttpCli.Do failed: err=%v", err)
        return
     }
     var body []byte

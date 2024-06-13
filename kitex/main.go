@@ -24,7 +24,7 @@ func main() {
 		server.WithRegistry(r),
 		server.WithServerBasicInfo(
           	&rpcinfo.EndpointBasicInfo{
-            	ServiceName: "kitex_student_yeah",
+            	ServiceName: "student",
             },
 		), 
 	)
