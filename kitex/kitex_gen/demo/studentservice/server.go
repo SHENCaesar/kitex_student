@@ -2,7 +2,7 @@
 package studentservice
 
 import (
-	demo "github.com/SHENCaesar/kitex_student/kitex/kitex_gen/demo"
+	demo "github.com/SHENCaesar/cloudwego/kitex-student/kitex/kitex_gen/demo"
 	server "github.com/cloudwego/kitex/server"
 )
 

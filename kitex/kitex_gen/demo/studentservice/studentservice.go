@@ -5,7 +5,7 @@ package studentservice
 import (
 	"context"
 	"errors"
-	demo "github.com/SHENCaesar/kitex_student/kitex/kitex_gen/demo"
+	demo "github.com/SHENCaesar/cloudwego/kitex-student/kitex/kitex_gen/demo"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 )

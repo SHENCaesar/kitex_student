@@ -145,53 +145,84 @@ func BenchmarkStudentService(b *testing.B) {
 	}
 }
 
-// request sends an HTTP POST request to the specified gateway with the given method and business parameters.
-// It returns the response as a map of interface{} and an error if occurred.
-func request(method string, bizParam interface{}) (map[string]interface{}, error) {
-	// Marshal the business parameters
+func request(method string, bizParam any) (rResp map[string]interface{}, err error) {
 	bizParamBody, err := json.Marshal(bizParam)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal business parameters: %v", err)
+		return nil, fmt.Errorf("marshal request failed: err=%v", err)
 	}
-
-	// Create the request body with method and business parameters
-	reqBody := &reqParam{
+	reqBody, err := json.Marshal(&reqParam{
 		Method:    method,
 		BizParams: string(bizParamBody),
-	}
-	reqBodyBytes, err := json.Marshal(reqBody)
+	})
 	if err != nil {
-		return nil, fmt.Errorf("failed to create request body: %v", err)
+		return nil, fmt.Errorf("marshal bizParam failed: err=%v", err)
 	}
-
-	// Create the HTTP request
-	req, err := http.NewRequest(http.MethodPost, gatewayURL, bytes.NewBuffer(reqBodyBytes))
-	if err != nil {
-		return nil, fmt.Errorf("failed to create HTTP request: %v", err)
-	}
+	var resp *http.Response
+	req, err := http.NewRequest(http.MethodPost, gatewayURL, bytes.NewBuffer(reqBody))
 	req.Header.Set("Content-Type", "application/json")
-
-	// Send the request and get the response
-	resp, err := httpCli.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("HTTP request failed: %v", err)
-	}
+	resp, err = httpCli.Do(req)
 	defer resp.Body.Close()
-
-	// Read the response body
-	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read response body: %v", err)
+		return
+	}
+	var body []byte
+	if body, err = io.ReadAll(resp.Body); err != nil {
+		return
 	}
 
-	// Unmarshal the response body to the response map
-	var rResp map[string]interface{}
-	if err := json.Unmarshal(body, &rResp); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal response: %v", err)
+	if err = json.Unmarshal(body, &rResp); err != nil {
+		return
 	}
-
-	return rResp, nil
+	return
 }
+
+// // request sends an HTTP POST request to the specified gateway with the given method and business parameters.
+// // It returns the response as a map of interface{} and an error if occurred.
+// func request(method string, bizParam interface{}) (map[string]interface{}, error) {
+// 	// Marshal the business parameters
+// 	bizParamBody, err := json.Marshal(bizParam)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to marshal business parameters: %v", err)
+// 	}
+
+// 	// Create the request body with method and business parameters
+// 	reqBody := &reqParam{
+// 		Method:    method,
+// 		BizParams: string(bizParamBody),
+// 	}
+// 	reqBodyBytes, err := json.Marshal(reqBody)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to create request body: %v", err)
+// 	}
+
+// 	// Create the HTTP request
+// 	req, err := http.NewRequest(http.MethodPost, gatewayURL, bytes.NewBuffer(reqBodyBytes))
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to create HTTP request: %v", err)
+// 	}
+// 	req.Header.Set("Content-Type", "application/json")
+
+// 	// Send the request and get the response
+// 	resp, err := httpCli.Do(req)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("HTTP request failed: %v", err)
+// 	}
+// 	defer resp.Body.Close()
+
+// 	// Read the response body
+// 	body, err := io.ReadAll(resp.Body)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to read response body: %v", err)
+// 	}
+
+// 	// Unmarshal the response body to the response map
+// 	var rResp map[string]interface{}
+// 	if err := json.Unmarshal(body, &rResp); err != nil {
+// 		return nil, fmt.Errorf("failed to unmarshal response: %v", err)
+// 	}
+
+// 	return rResp, nil
+// }
 
 func genStudent(id int) *demo.Student {
 	return &demo.Student{

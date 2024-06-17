@@ -24,6 +24,6 @@ struct QueryReq {
 
 //----------------------service-------------------
 service StudentService {
-    RegisterResp Register(1: Student student)(api.post = '/add-student-info', api.param = 'true')
-    Student Query(1: QueryReq req)(api.get = '/query', api.param = 'true')
+    RegisterResp Register(1: Student student)(api.post = '/student/register', api.param = 'true')
+    Student Query(1: QueryReq req)(api.get = '/student/query', api.param = 'true')
 }

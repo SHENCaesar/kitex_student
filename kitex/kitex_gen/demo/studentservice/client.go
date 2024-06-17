@@ -4,7 +4,7 @@ package studentservice
 
 import (
 	"context"
-	demo "github.com/SHENCaesar/kitex_student/kitex/kitex_gen/demo"
+	demo "github.com/SHENCaesar/cloudwego/kitex-student/kitex/kitex_gen/demo"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
 )
